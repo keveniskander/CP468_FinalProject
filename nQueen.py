@@ -47,6 +47,10 @@ class Board:
 
         return
 
+    def min_conflicts(self):
+
+        return
+
 
 
 
