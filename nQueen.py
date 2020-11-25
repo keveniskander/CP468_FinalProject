@@ -10,10 +10,12 @@ Authors:  Keven Iskander, Carla Castaneda, Nicole Laslavic, Alexander Francis
 __updated__ = "2020-11-24"
 ---------
 """
+import random
 
 class Board:
     def __init__(self,n=None):
         self.table = []
+        self.n=n
         if n!=None:
 
             for _ in range (n):
@@ -22,6 +24,16 @@ class Board:
                     row.append(0)
 
                 self.table.append(row)
+            self.add_queens()
+
+        return
+
+    def add_queens(self):
+
+        for i in range (len(self.table)):
+            random_row=random.randint(0,self.n-1)
+
+            self.table[random_row][i]=1
 
         return
 
@@ -41,7 +53,7 @@ class Board:
         
 
 def main():
-    board=Board(5)
+    board=Board(7)
 
     board.printBoard()
 
