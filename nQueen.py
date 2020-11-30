@@ -160,16 +160,12 @@ class Board:
 
         return result
 
-        
 
 def main():
     board=Board(7)
-
     board.printBoard()
+    print(board.is_solved())
 
-    print(broad.is_solved())
-
-    
 
 if __name__ == "__main__":
     main()
