@@ -101,7 +101,7 @@ class Board:
 
         return check
 
-    def cordinalCheck(self, row, col):
+    def cardinalCheck(self, row, col):
         if(self.table[row][col] == 1):
             check = True
             a = row
@@ -154,7 +154,7 @@ class Board:
             for j in range(self.n):
                 if self.table[i][j] == 1:
                     result1 = self.diagonalCheck(i,j)
-                    result2 = self.cordinalCheck(i,j)
+                    result2 = self.cardinalCheck(i,j)
                     if result1 == False or result2 == False:
                         return False
 
