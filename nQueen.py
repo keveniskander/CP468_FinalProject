@@ -26,10 +26,10 @@ class Queen:
         return int(self.value)
 
 class Board:
-    def __init__(self,n=None, queenLocations=[]):
+    def __init__(self,n=None, queens=[]):
         self.table = []
         self.n=n
-        self.queenLocations = []
+        self.queens = []
         if n!=None:
 
             for _ in range (n):
@@ -48,8 +48,8 @@ class Board:
             random_row=random.randint(0,self.n-1)
 
             self.table[random_row][i]=1
-            location = (random_row, i)
-            self.queenLocations.append(location)
+            
+            self.queens.append(Queen(1,0,random_row, i))
         return
 
     def printBoard(self):
