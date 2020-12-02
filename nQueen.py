@@ -12,6 +12,19 @@ __updated__ = "2020-11-24"
 """
 import random
 
+class Node:
+    domain = 0
+    value = 0
+    def __init__(self, value, domain = domain,row=0,col=0):
+        self.value = value
+        self.domain = domain
+        self.row=row
+        self.col=col
+        return
+
+    def __int__(self):
+        return int(self.value)
+
 class Board:
     def __init__(self,n=None):
         self.table = []
