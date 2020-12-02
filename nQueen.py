@@ -26,9 +26,10 @@ class Node:
         return int(self.value)
 
 class Board:
-    def __init__(self,n=None):
+    def __init__(self,n=None, queenLocations=[]):
         self.table = []
         self.n=n
+        self.queenLocations = []
         if n!=None:
 
             for _ in range (n):
@@ -47,7 +48,8 @@ class Board:
             random_row=random.randint(0,self.n-1)
 
             self.table[random_row][i]=1
-
+            location = (i, random_row)
+            self.queenLocations.append(location)
         return
 
     def printBoard(self):
