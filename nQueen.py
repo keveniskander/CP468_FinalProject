@@ -188,8 +188,6 @@ def main():
 
     board.update_conflicts()
 
-    print(board.is_solved())
-
 
 
 if __name__ == "__main__":
