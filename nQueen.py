@@ -12,12 +12,12 @@ __updated__ = "2020-11-24"
 """
 import random
 
-class Node:
-    domain = 0
+class Queen:
+    conflicts = 0
     value = 0
-    def __init__(self, value, domain = domain,row=0,col=0):
+    def __init__(self, value, conflicts = 0,row=0,col=0):
         self.value = value
-        self.domain = domain
+        self.conflicts = conflicts
         self.row=row
         self.col=col
         return
