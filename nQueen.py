@@ -48,7 +48,7 @@ class Board:
             random_row=random.randint(0,self.n-1)
 
             self.table[random_row][i]=1
-            location = (i, random_row)
+            location = (random_row, i)
             self.queenLocations.append(location)
         return
 
