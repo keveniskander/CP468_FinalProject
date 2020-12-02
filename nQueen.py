@@ -181,6 +181,10 @@ def main():
     board.printBoard()
     print(board.is_solved())
 
+    for i in range(len(board.queens)):
+        print(board.queens[i].value)
+        
+
 
 if __name__ == "__main__":
     main()
