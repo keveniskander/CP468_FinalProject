@@ -171,8 +171,24 @@ class Board:
     # #max_steps = number of steps allowed before giving up
     def min_conflicts(self, max_steps):
 
+        
+
 
         return
+
+    def possible_moves(self,queen):
+        row=queen.row
+        col=queen.col
+        moves=[]
+
+        for i in range (self.n):
+            if (i!=row):
+                moves.append((i,col))
+
+        return moves
+
+
+
 
   
    
@@ -187,6 +203,11 @@ def main():
     board.printBoard()
 
     board.update_conflicts()
+
+    print("POSSIBLE MOVES FOR QUEEN")
+    print(board.possible_moves(board.queens[0]))
+
+   
 
 
 
