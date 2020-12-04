@@ -165,13 +165,13 @@ class Board:
         
         row = row
         col = col
-        print("Row: ", row)
-        print("Col: ", col)
+        # print("Row: ", row)
+        # print("Col: ", col)
         diag_conflicts = self.conflicts_diag(row, col)
         cardinal_conflicts = self.conflicts_cardinal(row, col)
         conflicts = diag_conflicts + cardinal_conflicts
         
-        print("Conflicts: ", conflicts)
+        # print("Conflicts: ", conflicts)
         return conflicts
     
 
@@ -190,7 +190,9 @@ class Board:
         for queen in list_queens:
 
             moves=self.possible_moves(queen)
-            min_conflicts= (queen.row,queen.col)
+
+            min_conflicts= queen.conflicts
+            min_pos= (queen.row,queen.col)
         
             for move in moves:
                 row=move[0]
@@ -198,17 +200,29 @@ class Board:
                 new_conflicts= self.current_queen_conflicts(row,col,queen)
 
                 if (new_conflicts<min_conflicts):
-                    min_conflict=new_conflicts
+
+                    min_conflicts=new_conflicts
+
+                    min_pos= (row,col)
+
+            self.make_move(min_pos[0],min_pos[1],queen)
+
+            queen.conflicts=min_conflicts
+            print()
+            print("new position:")
+            print("row:",min_pos[0])
+            print("col:",min_pos[1])
+            print("new conflict",queen.conflicts)
 
 
 
         return
 
-    def update_queen_conflict(self):
-        
+    # def update_queen_conflict(self,row,col,queen):
 
+    #     queen.conflicts= self.current_queen_conflicts(row,col,queen)
 
-        return
+    #     return
 
     def make_move(self,row,col,queen):
 
@@ -248,6 +262,11 @@ def main():
 
     print("POSSIBLE MOVES FOR QUEEN")
     print(board.possible_moves(board.queens[0]))
+
+    print()
+    print("MIN_CONFLICTS")
+
+    board.min_conflicts(0)
 
    
 
