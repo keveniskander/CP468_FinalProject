@@ -161,6 +161,20 @@ class Board:
             print("Conflicts: ", conflicts)
         return
 
+    def current_queen_conflicts(self,row,col,queen):
+        
+        row = row
+        col = col
+        print("Row: ", row)
+        print("Col: ", col)
+        diag_conflicts = self.conflicts_diag(row, col)
+        cardinal_conflicts = self.conflicts_cardinal(row, col)
+        conflicts = diag_conflicts + cardinal_conflicts
+        
+        print("Conflicts: ", conflicts)
+        return conflicts
+    
+
     def printBoard(self):
         for i in range(len(self.table)):
             for j in range (len(self.table)):
@@ -171,9 +185,37 @@ class Board:
     # #max_steps = number of steps allowed before giving up
     def min_conflicts(self, max_steps):
 
+        list_queens=self.queens
+        
+        for queen in list_queens:
+
+            moves=self.possible_moves(queen)
+            min_conflicts= (queen.row,queen.col)
+        
+            for move in moves:
+                row=move[0]
+                col=move[1]
+                new_conflicts= self.current_queen_conflicts(row,col,queen)
+
+                if (new_conflicts<min_conflicts):
+                    min_conflict=new_conflicts
+
+
+
+        return
+
+    def update_queen_conflict(self):
         
 
 
+        return
+
+    def make_move(self,row,col,queen):
+
+        self.table[row][col]=1
+        self.table[queen.row][queen.col]=0
+        queen.row=row
+        queen.col=col
         return
 
     def possible_moves(self,queen):
