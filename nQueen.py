@@ -159,24 +159,19 @@ class Board:
         for i in range(len(self.queens)):
             row = self.queens[i].row
             col = self.queens[i].col
-            # print("Row: ", row)
-            # print("Col: ", col)
             diag_conflicts = self.conflicts_diag(row, col)
             cardinal_conflicts = self.conflicts_cardinal(row, col)
             conflicts = diag_conflicts + cardinal_conflicts
             self.queens[i].conflicts = conflicts
-            # print("Conflicts: ", conflicts)
         return
 
     def current_queen_conflicts(self,row,col):
-        
-
         # print("Row: ", row)
         # print("Col: ", col)
         diag_conflicts = self.conflicts_diag(row, col)
         cardinal_conflicts = self.conflicts_cardinal(row, col)
         conflicts = diag_conflicts + cardinal_conflicts
-        
+  
         # print("Conflicts: ", conflicts)
         return conflicts
     
