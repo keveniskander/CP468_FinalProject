@@ -11,6 +11,7 @@ __updated__ = "2020-11-24"
 ---------
 """
 import random
+import time
 
 
 class Queen:
@@ -315,6 +316,8 @@ class Board:
 
 def main():
     board = Board(8)
+    start_time = time.time()
+    
     board.print_board()
     board.update_conflicts()
     # print("POSSIBLE MOVES FOR QUEEN")
@@ -324,7 +327,8 @@ def main():
     board.min_conflicts()
     board.print_board()
     print("Board is solved?: ", board.is_solved())
-
+    end_time = time.time()-start_time
+    print(end_time)
 
 if __name__ == "__main__":
     main()
