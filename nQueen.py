@@ -10,10 +10,7 @@ Authors:  Keven Iskander, Carla Castaneda, Nicole Laslavic, Alexander Francis
 __updated__ = "2020-11-24"
 ---------
 """
-
 import random
-from colorama import Fore, Back, Style
-
 
 class Queen:
     value = 0
