@@ -322,12 +322,13 @@ def main():
     board.update_conflicts()
     # print("POSSIBLE MOVES FOR QUEEN")
     # print(board.possible_moves(board.queens[0]))
-    print("-----------------------------------------------------")
+    print("-" * 30)
     print("MIN_CONFLICTS")
     board.min_conflicts()
     board.print_board()
     print("Board is solved?: ", board.is_solved())
     end_time = time.time()-start_time
+    print()
     print("Execution Time: {:.3f} seconds".format(end_time))
 
 
