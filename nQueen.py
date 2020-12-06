@@ -192,7 +192,7 @@ class Board:
     def min_conflicts(self, max_steps):
         max_steps=0
 
-        while (self.is_solved()==False):
+        while (self.is_solved()==False and max_steps<500):
 
             list_queens=self.queens
             
@@ -259,7 +259,7 @@ class Board:
             queen.row=row
             queen.col=col
             self.update_conflicts()
-            self.printBoard()
+            # self.printBoard()
         return
 
     def possible_moves(self,queen):
@@ -303,7 +303,7 @@ class Board:
 def main():
     print("\033[1;37;40m Bright Colour\033[0;37;40m \n")
 
-    board=Board(4)
+    board=Board(8)
 
     board.printBoard()
 
