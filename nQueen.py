@@ -328,7 +328,8 @@ def main():
     board.print_board()
     print("Board is solved?: ", board.is_solved())
     end_time = time.time()-start_time
-    print(end_time)
+    print("Execution Time: {:.3f} seconds".format(end_time))
+
 
 if __name__ == "__main__":
     main()
