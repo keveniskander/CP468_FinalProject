@@ -64,7 +64,7 @@ class Board:
             self.queens.append(Queen(1, 0, random_row, i))
         self.update_conflicts()
         return
-
+    
     def conflicts_diag(self, row, col):
         """
         -------------------------------------------------------
@@ -76,48 +76,18 @@ class Board:
         Return: value - number of conflicts
         -------------------------------------------------------
         """
-        value = 0
-        a = row
-        b = col
-        # check bottom left
-        while a < self.n and b >= 0:
-            a += 1
-            b -= 1
-            if a >= self.n or b < 0:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        a = row
-        b = col
-        # check bottom right
-        while a < self.n and b < self.n:
-            a += 1
-            b += 1
-            if a >= self.n or b >= self.n:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        a = row
-        b = col
-        # check top right
-        while a >= 0 and b < self.n:
-            a -= 1
-            b += 1
-            if a < 0 or b >= self.n:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        a = row
-        b = col
-        # check top left
-        while a >= 0 and b >= 0:
-            a -= 1
-            b -= 1
-            if a < 0 or b < 0:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        return value
+        count = 0
+        value1 = row+col
+        value2 = row-col
+        for i in range(self.n):
+            opp_value1 = self.queens[i].row + self.queens[i].col
+            opp_value2 = self.queens[i].row - self.queens[i].col
+            if self.queens[i].row == row and self.queens[i].col == col:
+                continue
+            if value1 == opp_value1 or value2 == opp_value2:
+                count += 1
+        return count
+
 
     def conflicts_cardinal(self, row, col):
         """
@@ -130,44 +100,13 @@ class Board:
         Return: value - number of conflicts
         -------------------------------------------------------
         """
-        value = 0
-        a = row
-        b = col
-        # check above
-        while a < 0:
-            a -= 1
-            if a < 0:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        a = row
-        b = col
-        # check bellow
-        while a < self.n:
-            a += 1
-            if a >= self.n:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        a = row
-        b = col
-        # check right
-        while b < self.n:
-            b += 1
-            if b >= self.n:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        a = row
-        b = col
-        # check left
-        while b >= 0:
-            b -= 1
-            if b < 0:
-                break
-            if self.table[a][b] == 1:
-                value += 1
-        return value
+        count = 0
+        for i in range(self.n):
+            if row == self.queens[i].row and col == self.queens[i].col:
+                continue
+            if row == self.queens[i].row or col == self.queens[i].col:
+                count += 1
+        return count
 
     def update_conflicts(self):
         """
