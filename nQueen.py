@@ -21,7 +21,7 @@ class Queen:
     row = 0
     col = 0
     def __init__(self, value, row, col):
-        self.value = value
+        self.value = value #Value of all queens on board is 1, 0 on the board represents empty spaces.
         self.row = row
         self.col = col
         return
@@ -48,10 +48,11 @@ class Board:
             self.add_queens()
         return
 
+
     def add_queens(self):
         """
         -------------------------------------------------------
-        Adds queens randomly to board.
+        Adds queens randomly to board. Queens are set in individual rows and columns.
         Parameters: self - Board
         Return: None
         -------------------------------------------------------
@@ -65,6 +66,7 @@ class Board:
             self.queens.append(Queen(1, random_row, i))
         self.update_conflicts()
         return
+
 
     def conflicts(self, row, col):
         """
@@ -97,10 +99,12 @@ class Board:
                 count + 1
         return count
 
+
     def update_conflicts(self):
         """
         -------------------------------------------------------
-        Updates conflicts of all queens.
+        Sets totalconflicts to 1 if there is at least 1 conflict.
+        Will return 0 if the board is solved and has no conflicts.
         Parameters: self - Board
         Return: None
         -------------------------------------------------------
@@ -132,47 +136,54 @@ class Board:
         return
 
 
-    def tabu_search(self):
-            tabu = [[0 for i in range(len(self.table))] for j in range(len(self.table))]
-            x = 0
-            while self.totalconflicts > 0:
-                new_queen = random.randint(0, len(self.queens) - 1)
-                row = self.queens[new_queen].row
-                col = self.queens[new_queen].col
-                if self.conflicts(row, col)>0:
-                    moves = self.possible_moves(self.queens[new_queen])
-                    not_tabu = []
+    def solver(self):
+        """
+        -------------------------------------------------------
+        This solver uses min_conflicts with tabu search to solve the queens problem.
+        Parameters: self - Board
+        Return: None
+        -------------------------------------------------------
+        """
+        tabu = [[0 for i in range(len(self.table))] for j in range(len(self.table))]
+        x = 0
+        while self.totalconflicts > 0:
+            new_queen = random.randint(0, len(self.queens) - 1)
+            row = self.queens[new_queen].row
+            col = self.queens[new_queen].col
+            if self.conflicts(row, col)>0:
+                moves = self.possible_moves(self.queens[new_queen])
+                not_tabu = []
 
-                    for i in range(len(moves)):
-                        if tabu[moves[i][0]][moves[i][1]] <= x:
-                            not_tabu.append(moves[i])
+                for i in range(len(moves)):
+                    if tabu[moves[i][0]][moves[i][1]] <= x:
+                        not_tabu.append(moves[i])
 
-                    if len(not_tabu)>0:
-                        min_move = not_tabu[0]
-                        min_conflict = self.conflicts(not_tabu[0][0], not_tabu[0][1])
-                        for k in range(len(not_tabu)):
-                            current_conflict = self.conflicts(not_tabu[k][0], not_tabu[k][1])
-                            if min_conflict >= current_conflict:
-                                min_move = not_tabu[k]
-                                min_conflict = current_conflict
+                if len(not_tabu)>0:
+                    min_move = not_tabu[0]
+                    min_conflict = self.conflicts(not_tabu[0][0], not_tabu[0][1])
+                    for k in range(len(not_tabu)):
+                        current_conflict = self.conflicts(not_tabu[k][0], not_tabu[k][1])
+                        if min_conflict >= current_conflict:
+                            min_move = not_tabu[k]
+                            min_conflict = current_conflict
 
-                        tabu[self.queens[new_queen].row][self.queens[new_queen].col] = x + ((self.n)+10)
+                    tabu[self.queens[new_queen].row][self.queens[new_queen].col] = x + ((self.n)+10)
 
-                        row=self.queens[new_queen].row
-                        col=self.queens[new_queen].col
+                    row=self.queens[new_queen].row
+                    col=self.queens[new_queen].col
 
-                        self.table[row][col]=0
-                        self.table[min_move[0]][col]=1
+                    self.table[row][col]=0
+                    self.table[min_move[0]][col]=1
 
-                        # self.queens[new_queen].conflicts = min_conflict
-                        self.queens[new_queen].row = min_move[0]
-                        self.update_conflicts()
-                        # self.is_solved()
-                    x+=1
+                    # self.queens[new_queen].conflicts = min_conflict
+                    self.queens[new_queen].row = min_move[0]
+                    self.update_conflicts()
+                    # self.is_solved()
+                x+=1
 
-            if (x==MAX_TABU):
-                print("LIMIT")
-            return  
+        if (x==MAX_TABU):
+            print("LIMIT")
+        return  
 
 
     def possible_moves(self, queen):
@@ -189,9 +200,16 @@ class Board:
         for i in range(self.n):
             moves.append((i, col))
         return moves
-    
+
 
     def is_solved (self):
+        """
+        -------------------------------------------------------
+        Returns boolean value on solved status of board.
+        Parameters: self - Board
+        Return: valid - boolean value
+        -------------------------------------------------------
+        """
         valid = True
         self.update_conflicts()
         if self.totalconflicts > 0:
@@ -200,17 +218,17 @@ class Board:
 
 
 def main():
-    board = Board(10000)
+    board = Board(300)
     start_time = time.time()
-    # board.print_board()
-    
-    board.tabu_search()
+    board.print_board()
+    board.solver()
     print("-------------")
     board.print_board()
     print("Board is solved?: ", board.is_solved())
     end_time = time.time()-start_time
     print()
     print("Execution Time: {:.3f} seconds".format(end_time))
+
 
 if __name__ == "__main__":
     main()
