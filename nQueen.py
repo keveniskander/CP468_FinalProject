@@ -13,16 +13,15 @@ __updated__ = "2020-11-24"
 import random
 import time
 
+MAX_TABU=300
+
 
 class Queen:
     value = 0
-    conflicts = 0
     row = 0
     col = 0
-
-    def __init__(self, value, conflicts, row, col):
+    def __init__(self, value, row, col):
         self.value = value
-        self.conflicts = conflicts
         self.row = row
         self.col = col
         return
@@ -35,6 +34,8 @@ class Board:
     def __init__(self, n=None, queens=None):
         if queens is None:
             pass
+        self.totalconflicts=0
+
         self.table = []
         self.n = n
         self.queens = []
@@ -61,11 +62,11 @@ class Board:
             random_row = random_list.pop()
             # random_row=random.randint(0,self.n-1)
             self.table[random_row][i] = 1
-            self.queens.append(Queen(1, 0, random_row, i))
+            self.queens.append(Queen(1, random_row, i))
         self.update_conflicts()
         return
-    
-    def conflicts_diag(self, row, col):
+
+    def conflicts(self, row, col):
         """
         -------------------------------------------------------
         Returns integer value representing number of other queens
@@ -86,21 +87,7 @@ class Board:
                 continue
             if value1 == opp_value1 or value2 == opp_value2:
                 count += 1
-        return count
-
-
-    def conflicts_cardinal(self, row, col):
-        """
-        -------------------------------------------------------
-        Returns integer value representing number of other queens
-        that are directly above, below, to the left and right of the location specified.
-        Parameters: self - Board
-                    row - row location
-                    col - column location
-        Return: value - number of conflicts
-        -------------------------------------------------------
-        """
-        count = 0
+        
         for i in range(self.n):
             if row == self.queens[i].row and col == self.queens[i].col:
                 continue
@@ -116,31 +103,17 @@ class Board:
         Return: None
         -------------------------------------------------------
         """
+        self.totalconflicts=0
         for i in range(len(self.queens)):
             row = self.queens[i].row
             col = self.queens[i].col
-            diag_conflicts = self.conflicts_diag(row, col)
-            cardinal_conflicts = self.conflicts_cardinal(row, col)
-            conflicts = diag_conflicts + cardinal_conflicts
-            self.queens[i].conflicts = conflicts
+            conflicts = self.conflicts(row, col)
+            # self.queens[i].conflicts = conflicts
+            if conflicts > 0:
+                self.totalconflicts = 1
+                return
         return
 
-    def current_queen_conflicts(self, row, col):
-        """
-        -------------------------------------------------------
-        Returns number of conflicts if a queen were to move into a certain spot.
-        Does not change the conflicts value.
-        Parameters: self - Board
-                    row - row of queens location
-                    col - column of queens location
-        Return: conflicts - number of conflicts if queen were to 
-                            move into specified row and col
-        -------------------------------------------------------
-        """
-        diag_conflicts = self.conflicts_diag(row, col)
-        cardinal_conflicts = self.conflicts_cardinal(row, col)
-        conflicts = diag_conflicts + cardinal_conflicts
-        return conflicts
 
     def print_board(self):
         """
@@ -156,67 +129,49 @@ class Board:
             print()
         return
 
-    # #max_steps = number of steps allowed before giving up
-    def min_conflicts(self):
-        """
-        -------------------------------------------------------
-        Solves queen problem
-        Parameters: self - Board
-                    max_steps - Maximum number of steps allowed to make
-        Return: None
-        -------------------------------------------------------
-        """
-        max_steps = 0
-        while self.is_solved() is False and max_steps < 500:
-            list_queens = self.queens
-            new_queen = random.randint(0, self.n - 1)
-            queen = list_queens[new_queen]
-            moves = self.possible_moves(queen)
-            min_conflicts = queen.conflicts
-            min_pos = (queen.row, queen.col)
-            # print("queen picked col=",queen.col)
-            for move in moves:
-                row = move[0]
-                col = move[1]
-                new_conflicts = self.current_queen_conflicts(row, col)
-                if new_conflicts <= min_conflicts:
-                    min_conflicts = new_conflicts
-                    min_pos = (row, col)
-                # if (min_conflicts!=queen.conflicts):
-            queen.conflicts = min_conflicts
-            self.make_move(min_pos[0], min_pos[1], queen)
-            # print()
-            # print("new position:")
-            # print("row:",min_pos[0])
-            # print("col:",min_pos[1])
-            # print("New Conflict:",queen.conflicts)
-            # if (min_conflicts==0):
-            #     print("added to solved")
-            #     solved+=1
-            max_steps += 1
-        print('DONE')
-        return
 
-    def make_move(self, row, col, queen):
-        """
-        -------------------------------------------------------
-        Makes specified queen move to new location. 
-        Parameters: self - Board
-                    row - row location
-                    col - column location
-                    queen - queen piece
-        Return: None
-        -------------------------------------------------------
-        """
-        if row != queen.row:
-            # print("THIS SHOULD CHANGE TABLE")
-            self.table[row][col] = 1
-            self.table[queen.row][queen.col] = 0
-            queen.row = row
-            queen.col = col
-            self.update_conflicts()
-            # self.printBoard()
-        return
+    def tabu_search(self):
+            tabu = [[0 for i in range(len(self.table))] for j in range(len(self.table))]
+            x = 0
+            while self.totalconflicts > 0:
+                new_queen = random.randint(0, len(self.queens) - 1)
+                row = self.queens[new_queen].row
+                col = self.queens[new_queen].col
+                if self.conflicts(row, col)>0:
+                    moves = self.possible_moves(self.queens[new_queen])
+                    not_tabu = []
+
+                    for i in range(len(moves)):
+                        if tabu[moves[i][0]][moves[i][1]] <= x:
+                            not_tabu.append(moves[i])
+
+                    if len(not_tabu)>0:
+                        min_move = not_tabu[0]
+                        min_conflict = self.conflicts(not_tabu[0][0], not_tabu[0][1])
+                        for k in range(len(not_tabu)):
+                            current_conflict = self.conflicts(not_tabu[k][0], not_tabu[k][1])
+                            if min_conflict >= current_conflict:
+                                min_move = not_tabu[k]
+                                min_conflict = current_conflict
+
+                        tabu[self.queens[new_queen].row][self.queens[new_queen].col] = x + ((self.n)+10)
+
+                        row=self.queens[new_queen].row
+                        col=self.queens[new_queen].col
+
+                        self.table[row][col]=0
+                        self.table[min_move[0]][col]=1
+
+                        # self.queens[new_queen].conflicts = min_conflict
+                        self.queens[new_queen].row = min_move[0]
+                        self.update_conflicts()
+                        # self.is_solved()
+                    x+=1
+
+            if (x==MAX_TABU):
+                print("LIMIT")
+            return  
+
 
     def possible_moves(self, queen):
         """
@@ -230,46 +185,30 @@ class Board:
         col = queen.col
         moves = []
         for i in range(self.n):
-            if i != queen.row:
-                moves.append((i, col))
+            moves.append((i, col))
         return moves
+    
 
-    def is_solved(self):
-        """
-        -------------------------------------------------------
-        Returns boolean value of solved status of Board 
-        Parameters: self - Board
-        Return: Boolean - True if board is solved
-                          False if board is not solved
-        -------------------------------------------------------
-        """
-        is_solved = False
-        conflicts_finished = 0
-        for i in range(len(self.queens)):
-            if self.queens[i].conflicts == 0:
-                conflicts_finished += 1
-        if conflicts_finished == self.n:
-            is_solved = True
-        return is_solved
+    def is_solved (self):
+        valid = True
+        self.update_conflicts()
+        if self.totalconflicts > 0:
+            valid = False
+        return valid
 
 
 def main():
-    board = Board(8)
+    board = Board(10000)
     start_time = time.time()
+    # board.print_board()
     
-    board.print_board()
-    board.update_conflicts()
-    # print("POSSIBLE MOVES FOR QUEEN")
-    # print(board.possible_moves(board.queens[0]))
-    print("-" * 30)
-    print("MIN_CONFLICTS")
-    board.min_conflicts()
+    board.tabu_search()
+    print("-------------")
     board.print_board()
     print("Board is solved?: ", board.is_solved())
     end_time = time.time()-start_time
     print()
     print("Execution Time: {:.3f} seconds".format(end_time))
-
 
 if __name__ == "__main__":
     main()
