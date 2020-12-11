@@ -92,7 +92,7 @@ class Board:
             if row == self.queens[i].row and col == self.queens[i].col:
                 continue
             if row == self.queens[i].row or col == self.queens[i].col:
-                count + 1
+                count += 1
         return count
 
 
