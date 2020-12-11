@@ -35,7 +35,6 @@ class Board:
         if queens is None:
             pass
         self.totalconflicts=0
-
         self.table = []
         self.n = n
         self.queens = []
@@ -61,7 +60,6 @@ class Board:
         random.shuffle(random_list)
         for i in range(len(self.table)):
             random_row = random_list.pop()
-            # random_row=random.randint(0,self.n-1)
             self.table[random_row][i] = 1
             self.queens.append(Queen(1, random_row, i))
         self.update_conflicts()
@@ -112,7 +110,6 @@ class Board:
             row = self.queens[i].row
             col = self.queens[i].col
             conflicts = self.conflicts(row, col)
-            # self.queens[i].conflicts = conflicts
             if conflicts > 0:
                 self.totalconflicts = 1
                 return
@@ -151,11 +148,9 @@ class Board:
             if self.conflicts(row, col)>0:
                 moves = self.possible_moves(self.queens[new_queen])
                 not_tabu = []
-
                 for i in range(len(moves)):
                     if tabu[moves[i][0]][moves[i][1]] <= x:
                         not_tabu.append(moves[i])
-
                 if len(not_tabu)>0:
                     min_move = not_tabu[0]
                     min_conflict = self.conflicts(not_tabu[0][0], not_tabu[0][1])
@@ -164,21 +159,14 @@ class Board:
                         if min_conflict >= current_conflict:
                             min_move = not_tabu[k]
                             min_conflict = current_conflict
-
                     tabu[self.queens[new_queen].row][self.queens[new_queen].col] = x + ((self.n)+10)
-
                     row=self.queens[new_queen].row
                     col=self.queens[new_queen].col
-
                     self.table[row][col]=0
                     self.table[min_move[0]][col]=1
-
-                    # self.queens[new_queen].conflicts = min_conflict
                     self.queens[new_queen].row = min_move[0]
                     self.update_conflicts()
-                    # self.is_solved()
                 x+=1
-
         if (x==MAX_TABU):
             print("LIMIT")
         return  
@@ -216,7 +204,7 @@ class Board:
 
 
 def main():
-    board = Board(300)
+    board = Board(10000)
     start_time = time.time()
     board.print_board()
     board.solver()
@@ -226,7 +214,6 @@ def main():
     end_time = time.time()-start_time
     print()
     print("Execution Time: {:.3f} seconds".format(end_time))
-
 
 if __name__ == "__main__":
     main()
