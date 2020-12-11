@@ -91,8 +91,6 @@ class Board:
                 count += 1
             if value1 == opp_value1 or value2 == opp_value2:
                 count += 1
-
-        for i in range(self.n):
             if row == self.queens[i].row and col == self.queens[i].col:
                 continue
             if row == self.queens[i].row or col == self.queens[i].col:
