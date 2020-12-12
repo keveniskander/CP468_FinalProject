@@ -226,7 +226,8 @@ class Board:
 
 def main():
     start_time = time.time()
-    board = Board(100)
+    N = 8
+    board = Board(N)
     # board.print_board()
     board.solver()
     end_time = time.time() - start_time
