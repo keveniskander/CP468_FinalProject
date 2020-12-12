@@ -15,7 +15,6 @@ import time
 
 MAX_TABU = 300
 
-
 class Queen:
     value = 0
     row = 0
@@ -226,6 +225,7 @@ class Board:
 
 def main():
     start_time = time.time()
+    #Change variable N below for different board and queen qizes.
     N = 8
     board = Board(N)
     # board.print_board()
