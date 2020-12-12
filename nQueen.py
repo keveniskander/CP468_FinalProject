@@ -15,6 +15,7 @@ import time
 
 MAX_TABU = 300
 
+
 class Queen:
     value = 0
     row = 0
@@ -140,7 +141,7 @@ class Board:
         each row and col (i,j) is the positions of the squares in the board
         each value in the value is an iteration, and whenever that iteration is less
         than or equal to the current iteration that will be added to the new tabu array which 
-        contains tuples with the location of the possible move that isnt within the 
+        contains tuples with the location of the possible move that isn't within the 
         current iteration.
 
         -------------------------------------------------------
@@ -157,7 +158,7 @@ class Board:
                 for i in range(len(moves)):
                     if tabu[moves[i][0]][moves[i][1]] <= x:
                         not_tabu.append(moves[i])
-                        
+
                 """
                 -------------------------------------------------------
                 after checking that not_tabu list exists, we loop through
@@ -174,8 +175,9 @@ class Board:
                             min_move = not_tabu[k]
                             min_conflict = current_conflict
                     """
-                    we make the tabu value for that queens new position equal the current iteration + the number of queens
-                    so the next time that move will be able to be used is when that because the current iteration
+                    we make the tabu value for that queen's new position equal the current iteration summed with 
+                    the number of queens so the next time that move will be able to be used is when that because 
+                    the current iteration
                     """
                     tabu[self.queens[new_queen].row][self.queens[new_queen].col] = x + (self.n + 10)
                     """
@@ -225,9 +227,9 @@ class Board:
 
 def main():
     start_time = time.time()
-    #Change variable N below for different board and queen qizes.
-    N = 8
-    board = Board(N)
+    # Change variable 'n' below for different board and queen sizes.
+    n = 8
+    board = Board(n)
     # board.print_board()
     board.solver()
     end_time = time.time() - start_time
