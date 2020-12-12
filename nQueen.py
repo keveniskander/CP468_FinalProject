@@ -135,6 +135,17 @@ class Board:
         Return: None
         -------------------------------------------------------
         """
+        """
+        -------------------------------------------------------
+        this portion of the code initializes a 2d list called tabu in which
+        each row and col (i,j) is the positions of the squares in the board
+        each value in the value is an iteration, and whenever that iteration is less
+        than or equal to the current iteration that will be added to the new tabu array which 
+        contains tuples with the location of the possible move that isnt within the 
+        current iteration.
+
+        -------------------------------------------------------
+        """
         tabu = [[0 for _ in range(len(self.table))] for _ in range(len(self.table))]
         x = 0
         while self.total_conflicts > 0:
@@ -147,6 +158,14 @@ class Board:
                 for i in range(len(moves)):
                     if tabu[moves[i][0]][moves[i][1]] <= x:
                         not_tabu.append(moves[i])
+                        
+                """
+                -------------------------------------------------------
+                after checking that not_tabu list exists, we loop through
+                and find the one with the least conflicts by calling the conflicts function
+                and the one with the least conflicts will be the new move for that queen
+                -------------------------------------------------------
+                """
                 if len(not_tabu) > 0:
                     min_move = not_tabu[0]
                     min_conflict = self.conflicts(not_tabu[0][0], not_tabu[0][1])
@@ -155,7 +174,15 @@ class Board:
                         if min_conflict >= current_conflict:
                             min_move = not_tabu[k]
                             min_conflict = current_conflict
+                    """
+                    we make the tabu value for that queens new position equal the current iteration + the number of queens
+                    so the next time that move will be able to be used is when that because the current iteration
+                    """
                     tabu[self.queens[new_queen].row][self.queens[new_queen].col] = x + (self.n + 10)
+                    """
+                    we now switch the queen to the new square/position in its column
+
+                    """
                     row = self.queens[new_queen].row
                     col = self.queens[new_queen].col
                     self.table[row][col] = 0
