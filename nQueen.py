@@ -1,7 +1,7 @@
 """
 -------------------------------------------------------
 nQueen.py
-Places N (int) queens on any given NxN chessboard so 
+Places n (int) queens on any given n*n chess board so
 that no two queens are able to attack each other. 
 -------------------------------------------------------
 CP468
